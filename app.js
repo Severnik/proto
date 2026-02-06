@@ -182,7 +182,7 @@ function renderListings(containerId, listings) {
         return;
     }
 
-    container.innerHTML = filteredListings.map(listing => {
+    container.innerHTML = filteredListings.map((listing, index) => {
         const badgesHtml = [];
         if (listing.hasVip) badgesHtml.push('<span class="badge vip">VIP</span>');
         if (listing.hasTop) badgesHtml.push('<span class="badge top">TOP</span>');
@@ -192,6 +192,9 @@ function renderListings(containerId, listings) {
         if (listing.hasVip && listing.vipText) {
             fullStatusText += `\n${listing.vipText}`;
         }
+
+        // Show blue indicator dot on some listings (matching Figma design)
+        const showIndicator = listing.hasTop || (index === 2);
 
         return `
         <div class="listing-card" data-id="${listing.id}">
@@ -209,6 +212,7 @@ function renderListings(containerId, listings) {
                 <div class="listing-title">${listing.title}</div>
                 <div class="listing-status">${listing.statusText || `${listing.status.charAt(0).toUpperCase() + listing.status.slice(1)}`}${listing.hasVip && listing.vipText ? `<br>${listing.vipText}` : ''}</div>
             </div>
+            ${showIndicator ? '<div class="listing-indicator-dot"></div>' : ''}
         </div>
     `;}).join('');
 
